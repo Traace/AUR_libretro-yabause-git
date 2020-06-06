@@ -1,7 +1,7 @@
 # Maintainer: Maxime Gauduin <alucryd@archlinux.org>
 
 pkgname=libretro-yabause-git
-pkgver=r2953.c55eef97
+pkgver=r3296.f515e5a49
 pkgrel=1
 pkgdesc='Sega Saturn core'
 arch=('i686' 'x86_64')
@@ -16,19 +16,23 @@ source=('libretro-yabause::git+https://github.com/libretro/yabause.git')
 sha256sums=('SKIP')
 
 pkgver() {
-  cd libretro-yabause
+  cd "$srcdir/libretro-yabause/yabause/"
 
   echo "r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
 }
 
-build() {
-  cd libretro-yabause/libretro
+prepare() {
+  cd "$srcdir/libretro-yabause/yabause"
+  cmake .
+}
 
+build() {
+  cd "$srcdir/libretro-yabause/yabause/src/libretro"
   make
 }
 
 package() {
-  cd libretro-yabause/libretro
+  cd "$srcdir/libretro-yabause/yabause/src/libretro"
 
   install -Dm 644 yabause_libretro.so -t "${pkgdir}"/usr/lib/libretro/
 }
